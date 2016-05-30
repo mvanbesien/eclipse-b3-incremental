@@ -5,7 +5,7 @@ Bundle-SymbolicName: fr.mvanbesien.b3.cli.headless;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: fr.mvanbesien.b3.cli.headless.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime;bundle-version="[3.10.0,4.0.0)",
+ org.eclipse.core.runtime,
  org.eclipse.b3.cli;bundle-version="[0.2.0,1.0.0)",
  org.eclipse.b3.aggregator.edit;bundle-version="[0.2.0,1.0.0)",
  org.eclipse.b3.aggregator.legacy;bundle-version="[0.2.0,1.0.0)",
