@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/fr.mvanbesien.b3.cli.headless.feature_0.0.1.qualifier.jar" id="fr.mvanbesien.b3.cli.headless.feature" version="0.0.1.qualifier">
+      <category name="B3 Incremental"/>
+   </feature>
+   <category-def name="B3 Incremental" label="B3 Incremental"/>
+</site>

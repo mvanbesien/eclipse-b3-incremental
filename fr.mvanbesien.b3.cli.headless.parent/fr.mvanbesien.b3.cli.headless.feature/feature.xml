@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="fr.mvanbesien.b3.cli.headless.feature"
+      label="Eclipse B3 Incremental Headless Builder"
+      version="0.0.1.qualifier"
+      provider-name="mvanbesien">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.gnu.org/licenses/lgpl-2.1.html">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="fr.mvanbesien.b3.cli.headless"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
