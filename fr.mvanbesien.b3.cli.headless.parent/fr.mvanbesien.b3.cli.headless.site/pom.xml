@@ -8,4 +8,5 @@
   <groupId>fr.mvanbesien.b3.cli.headless.site</groupId>
   <artifactId>fr.mvanbesien.b3.cli.headless.site</artifactId>
   <packaging>eclipse-repository</packaging>
+  <name>B3 Incremental Aggregation</name>
 </project>
