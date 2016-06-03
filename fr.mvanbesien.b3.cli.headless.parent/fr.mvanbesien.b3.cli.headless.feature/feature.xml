@@ -17,6 +17,10 @@
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="org.eclipse.b3.aggregator.engine.feature" match="greaterOrEqual"/>
+   </requires>
+
    <plugin
          id="fr.mvanbesien.b3.cli.headless"
          download-size="0"
