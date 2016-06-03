@@ -19,6 +19,7 @@
 
    <requires>
       <import feature="org.eclipse.b3.aggregator.engine.feature" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.resources"/>
    </requires>
 
    <plugin
