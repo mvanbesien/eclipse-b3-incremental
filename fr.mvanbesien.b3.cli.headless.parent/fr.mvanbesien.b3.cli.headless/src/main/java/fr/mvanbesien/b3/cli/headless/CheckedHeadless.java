@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -50,12 +51,12 @@ public class CheckedHeadless implements IApplication {
 				}
 			}
 			if (pathToFile == null) {
-				System.out.println("Path to file not found. Launches aggregation by default.");
+				System.out.println("Path to aggregation file not found. Skipping check and launching effective aggregation.");
 				return defaultStart(context);
 			}
 			File file = new File(pathToFile);
 			if (!file.exists()) {
-				System.out.println("No file found at path " + pathToFile + ". Launches aggregation by default.");
+				System.out.println("No file found at path [" + pathToFile + ". Skipping check and launching effective aggregation.");
 				return defaultStart(context);
 			}
 
@@ -72,7 +73,7 @@ public class CheckedHeadless implements IApplication {
 				}
 			}
 			if (aggregation == null) {
-				System.out.println("Didn't find aggregation in file. Launches aggregation by default.");
+				System.out.println("Could not read file at [" + pathToFile + "]. Skipping check and launching effective aggregation.");
 				defaultStart(context);
 			}
 
@@ -99,7 +100,7 @@ public class CheckedHeadless implements IApplication {
 			boolean hasRepositoryToRefresh = false;
 			boolean isProcessingInError = false;
 			for (String repository : repositories) {
-				System.out.println("Checking last update for repository : " + repository);
+				System.out.println("Checking last update for repository : [" + repository+"]...");
 				long lastModified = -1;
 				if (repository.startsWith("http")) {
 					URL url = new URL(repository);
@@ -119,39 +120,39 @@ public class CheckedHeadless implements IApplication {
 						if (lastModified > lastStoredInfo) {
 							hasRepositoryToRefresh = true;
 							properties.put(repository, "" + lastModified);
-							System.out.println("\tRepository found in file with newer value. Aggregation will happen and repository stored");
+							System.out.println("- The repository seems to have been rebuilt (["+new Date(lastModified)+"] for ["+new Date(lastStoredInfo)+"]) in the meanwhile.");
 						} else {
-							System.out.println("\tRepository found but with older/same value.");
+							System.out.println("- The repository seems to be same or older than last build. (["+new Date(lastModified)+"] for ["+new Date(lastStoredInfo)+"]).");
 						}
 					} else {
-						System.out.println("\tRepository not found in file. Aggregation will happen and repository stored");
+						System.out.println("- Repository not found in file.");
 						hasRepositoryToRefresh = true;
 						properties.put(repository, "" + lastModified);
 					}
 				} else {
-					System.out.println("\tRepository didn't give date information. Repository set in error");
+					System.out.println("- Repository didn't give date information.");
 					isProcessingInError = true;
 				}
 
 			}
 			// If no newer, donc relaunch the aggregation.
 			if (hasRepositoryToRefresh) {
-				System.out.println("There are newer repositories built. Launching aggregation");
+				System.out.println("==> There are new or rebuilt repositories. Will perform the aggregation.");
 				properties.store(new FileWriter(infoFile), null);
-				System.out.println("File with history saved at "+infoFile.getPath());
+				System.out.println("(File with history saved at "+infoFile.getPath()+")");
 				return defaultStart(context);
 			}
 
 			if (isProcessingInError) {
-				System.out.println("There were unresolvable information while processing. Launching aggregation by default");
+				System.out.println("==> There were unresolvable information while processing. Will perform the aggregation.");
 				return defaultStart(context);
 			}
 
-			System.out.println("No new repository build found. Skipping aggregation");
+			System.out.println("==> No new or rebuilt repository identified. Skipping aggregation");
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Exception encountered. Launching aggregation by default.");
+			System.out.println("==> Exception encountered. Launching aggregation by default.");
 			return defaultStart(context);
 		}
 	}
