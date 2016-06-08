@@ -39,10 +39,4 @@ public final class TimeMagnifier {
 
 	}
 
-	public static void main(String[] args) {
-		Date d = new Date();
-		Date d2 = new Date(System.currentTimeMillis() - 86400000L * 2 * 365);
-		System.out.println(magnifyTimeDifference(d, d2));
-	}
-
 }
