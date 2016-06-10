@@ -87,14 +87,12 @@ public class CheckedHeadless implements IApplication {
 				}
 			}
 			if (pathToFile == null) {
-				System.out.println(
-						"Path to aggregation file not found. Skipping check and launching effective aggregation.");
+				System.out.println(Messages.PATH_NOT_FOUND.value());
 				return defaultStart(context);
 			}
 			File file = new File(pathToFile);
 			if (!file.exists()) {
-				System.out.println("No file found at path [" + pathToFile
-						+ ". Skipping check and launching effective aggregation.");
+				System.out.println(Messages.FILE_NOT_FOUND.value(pathToFile));
 				return defaultStart(context);
 			}
 
@@ -103,20 +101,17 @@ public class CheckedHeadless implements IApplication {
 			URI uri = URI.createFileURI(pathToFile);
 			EPackage.Registry.INSTANCE.put(AggregatorPackage.eNS_URI, AggregatorPackage.eINSTANCE);
 			Resource createdResource = new AggregatorResourceImpl(uri);
-			createdResource.load(Collections.EMPTY_MAP); // Not working as per
-															// missing packages
-															// ?
+			createdResource.load(Collections.EMPTY_MAP);
+
 			Aggregation aggregation = null;
-			for (Iterator<EObject> iterator = createdResource.getContents().iterator(); iterator.hasNext()
-					&& aggregation == null;) {
+			for (Iterator<EObject> iterator = createdResource.getContents().iterator(); iterator.hasNext() && aggregation == null;) {
 				EObject next = iterator.next();
 				if (next instanceof Aggregation) {
 					aggregation = (Aggregation) next;
 				}
 			}
 			if (aggregation == null) {
-				System.out.println("Could not read file at [" + pathToFile
-						+ "]. Skipping check and launching effective aggregation.");
+				System.out.println(Messages.FILE_NOT_READABLE.value(pathToFile));
 				defaultStart(context);
 			}
 
@@ -144,7 +139,7 @@ public class CheckedHeadless implements IApplication {
 			boolean hasRepositoryToRefresh = false;
 			boolean isProcessingInError = false;
 			for (String repository : repositories) {
-				System.out.println("Checking last update for repository : [" + repository + "]...");
+				System.out.println(Messages.CHECKING_LAST_UPDATE.value(repository));
 				long lastModified = -1;
 				if (repository.startsWith("http")) {
 					URL url = new URL(repository);
@@ -161,44 +156,42 @@ public class CheckedHeadless implements IApplication {
 				if (lastModified >= 0) {
 					if (properties.containsKey(repository)) {
 						long lastStoredInfo = Long.parseLong("" + properties.get(repository));
-						System.out.println("- The repository seems to have been rebuilt "
-								+ TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified)
-								+ (lastModified - lastStoredInfo != 0 ? " than " : " as ")
-								+ "the last referenced aggregation.");
+						System.out.println(
+								"- The repository seems to have been rebuilt " + TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified)
+										+ (lastModified - lastStoredInfo != 0 ? " than " : " as ") + "the last referenced aggregation.");
 						if (lastModified > lastStoredInfo) {
 							hasRepositoryToRefresh = true;
 							properties.put(repository, "" + lastModified);
 						}
 					} else {
-						System.out.println("- Repository not found in file.");
+						System.out.println(Messages.REPO_NOT_FOUND_IN_FILE.value());
 						hasRepositoryToRefresh = true;
 						properties.put(repository, "" + lastModified);
 					}
 				} else {
-					System.out.println("- Repository didn't give date information.");
+					System.out.println(Messages.REPO_NOT_DATED.value());
 					isProcessingInError = true;
 				}
 
 			}
 			// If no newer, donc relaunch the aggregation.
 			if (hasRepositoryToRefresh) {
-				System.out.println("==> There are new or rebuilt repositories. Will perform the aggregation.");
+				System.out.println(Messages.AGGREGATION_WILL_HAPPEN.value());
 				properties.store(new FileWriter(infoFile), null);
 				System.out.println("(File with history saved at " + infoFile.getPath() + ")");
 				return defaultStart(context);
 			}
 
 			if (isProcessingInError) {
-				System.out.println(
-						"==> There were unresolvable information while processing. Will perform the aggregation.");
+				System.out.println(Messages.AN_ERROR_OCCURRED.value());
 				return defaultStart(context);
 			}
 
-			System.out.println("==> No new or rebuilt repository identified. Skipping aggregation");
+			System.out.println(Messages.AGGREGATION_SKIPPED.value());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("==> Exception encountered. Launching aggregation by default.");
+			System.out.println(Messages.ON_EXCEPTION.value());
 			return defaultStart(context);
 		}
 	}
