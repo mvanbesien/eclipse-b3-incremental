@@ -19,9 +19,9 @@ package fr.mvanbesien.b3.cli.headless;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.net.Proxy.Type;
+import java.net.ProxySelector;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -143,7 +143,7 @@ public class CheckedHeadless implements IApplication {
 				long lastModified = -1;
 				if (repository.startsWith("http")) {
 					URL url = new URL(repository);
-					Proxy proxy = getProxy(args);
+					Proxy proxy = getProxy(repository);
 					URLConnection connection = proxy != null ? url.openConnection(proxy) : url.openConnection();
 					lastModified = connection.getLastModified();
 				} else {
@@ -213,20 +213,32 @@ public class CheckedHeadless implements IApplication {
 	 * @param args
 	 * @return
 	 */
-	private Proxy getProxy(String[] args) {
-		String httpProxyHost = System.getProperty("http.proxyHost");
-		String httpProxyPort = System.getProperty("http.proxyPort");
-		String httpsProxyHost = System.getProperty("https.proxyHost");
-		String httpsProxyPort = System.getProperty("https.proxyPort");
-
-		if (httpProxyHost != null && httpProxyPort != null) {
-			return new Proxy(Type.HTTP, new InetSocketAddress(httpProxyHost, Integer.parseInt(httpProxyPort)));
+	private static Proxy getProxy(String url) {
+		
+		List<Proxy> selector;
+		try {
+			selector = ProxySelector.getDefault().select(new java.net.URI(url));
+			return selector != null && selector.size() > 0 ? selector.get(0) : null;
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
-		if (httpsProxyHost != null && httpsProxyPort != null) {
-			return new Proxy(Type.HTTP, new InetSocketAddress(httpsProxyHost, Integer.parseInt(httpsProxyPort)));
-		}
-
 		return null;
+		
+//		List<Proxy> selector = ProxySelector.getDefault().select(null);
+//		
+//		String httpProxyHost = System.getProperty("http.proxyHost");
+//		String httpProxyPort = System.getProperty("http.proxyPort");
+//		String httpsProxyHost = System.getProperty("https.proxyHost");
+//		String httpsProxyPort = System.getProperty("https.proxyPort");
+//
+//		if (httpProxyHost != null && httpProxyPort != null) {
+//			return new Proxy(Type.HTTP, new InetSocketAddress(httpProxyHost, Integer.parseInt(httpProxyPort)));
+//		}
+//		if (httpsProxyHost != null && httpsProxyPort != null) {
+//			return new Proxy(Type.HTTP, new InetSocketAddress(httpsProxyHost, Integer.parseInt(httpsProxyPort)));
+//		}
+//
+//		return null;
 	}
 
 }
