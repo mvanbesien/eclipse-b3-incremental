@@ -144,11 +144,11 @@ public class CheckedHeadless implements IApplication {
 				if (repository.startsWith("http")) {
 					URL url = new URL(repository);
 					Proxy proxy = getProxy(repository);
-					System.out.println(" - Checking with proxy ["+proxy+"].");
-					long time = System.currentTimeMillis();
+					//System.out.println(" - Checking with proxy ["+proxy+"].");
+				//	long time = System.currentTimeMillis();
 					URLConnection connection = proxy != null ? url.openConnection(proxy) : url.openConnection();
 					lastModified = connection.getLastModified();
-					System.out.println("- Replied in "+(System.currentTimeMillis() - time)+" ms.");
+					//System.out.println("- Replied in "+(System.currentTimeMillis() - time)+" ms.");
 				} else {
 					File repositoryFile = new File(repository);
 					if (file.exists()) {
