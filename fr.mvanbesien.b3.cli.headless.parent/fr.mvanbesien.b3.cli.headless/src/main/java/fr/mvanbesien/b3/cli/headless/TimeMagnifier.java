@@ -1,7 +1,30 @@
+/**
+ *    DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *                   Version 2, December 2004
+ *
+ *Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+ *
+ * Everyone is permitted to copy and distribute verbatim or modified
+ * copies of this license *ocument, and changing it is allowed as long
+ * as the name is changed.*
+ *
+ *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ *
+ *  0. You just DO WHAT THE FUCK YOU WANT TO.
+ * 
+ */
 package fr.mvanbesien.b3.cli.headless;
 
 import java.util.Date;
 
+/**
+ * 
+ * Implementation that displays readable time from two timestamps/dates
+ * 
+ * @author mvanbesien <mvaawl@gmail.com>
+ *
+ */
 public final class TimeMagnifier {
 
 	private static final String[] SIGNS = { "earlier", "later" };

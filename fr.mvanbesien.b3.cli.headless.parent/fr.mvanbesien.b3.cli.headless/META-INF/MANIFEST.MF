@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Headless
+Bundle-Name: Eclipse B3 Incremental Headless Builder
 Bundle-SymbolicName: fr.mvanbesien.b3.cli.headless;singleton:=true
 Bundle-Version: 0.0.1.qualifier
 Bundle-Activator: fr.mvanbesien.b3.cli.headless.Activator
@@ -15,3 +15,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6,
  J2SE-1.5
 Bundle-ActivationPolicy: lazy
+Bundle-Vendor: mvanbesien

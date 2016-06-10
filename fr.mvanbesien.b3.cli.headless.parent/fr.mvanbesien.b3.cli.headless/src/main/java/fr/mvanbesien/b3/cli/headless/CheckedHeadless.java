@@ -1,3 +1,19 @@
+/**
+ *    DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *                   Version 2, December 2004
+ *
+ *Copyright (C) 2004 Sam Hocevar <sam@hocevar.net>
+ *
+ * Everyone is permitted to copy and distribute verbatim or modified
+ * copies of this license *ocument, and changing it is allowed as long
+ * as the name is changed.*
+ *
+ *           DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *  TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+ *
+ *  0. You just DO WHAT THE FUCK YOU WANT TO.
+ * 
+ */
 package fr.mvanbesien.b3.cli.headless;
 
 import java.io.File;
@@ -28,12 +44,33 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
 
+/**
+ * 
+ * Implementation that checks if the distant repositories have been rebuilt,
+ * before performing the effective aggregation.
+ * 
+ * @author mvanbesien <mvaawl@gmail.com>
+ *
+ */
 public class CheckedHeadless implements IApplication {
 
+	/**
+	 * Delegates to the effective call of the Headless B3 aggregation
+	 * 
+	 * @param context
+	 * @return
+	 * @throws Exception
+	 */
 	private Object defaultStart(IApplicationContext context) throws Exception {
 		return new Headless().start(context);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
+	 * IApplicationContext)
+	 */
 	@Override
 	public Object start(IApplicationContext context) throws Exception {
 
@@ -125,7 +162,7 @@ public class CheckedHeadless implements IApplication {
 					if (properties.containsKey(repository)) {
 						long lastStoredInfo = Long.parseLong("" + properties.get(repository));
 						System.out.println("- The repository seems to have been rebuilt "
-								+ TimeMagnifier.magnifyTimeDifference(lastModified, lastStoredInfo)
+								+ TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified)
 								+ (lastModified - lastStoredInfo != 0 ? " than " : " as ")
 								+ "the last referenced aggregation.");
 						if (lastModified > lastStoredInfo) {
@@ -166,11 +203,23 @@ public class CheckedHeadless implements IApplication {
 		}
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.equinox.app.IApplication#stop()
+	 */
 	@Override
 	public void stop() {
 		// Does nothing
 	}
 
+	/**
+	 * Technical method that creates Java Proxy in case the env variables are
+	 * present
+	 * 
+	 * @param args
+	 * @return
+	 */
 	private Proxy getProxy(String[] args) {
 		String httpProxyHost = System.getProperty("http.proxyHost");
 		String httpProxyPort = System.getProperty("http.proxyPort");
