@@ -24,6 +24,7 @@ import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -62,6 +63,7 @@ public class CheckedHeadless implements IApplication {
 	 * @throws Exception
 	 */
 	private Object defaultStart(IApplicationContext context) throws Exception {
+		System.out.println("Calling effective B3 aggregation now...");
 		return new Headless().start(context);
 	}
 
@@ -144,11 +146,13 @@ public class CheckedHeadless implements IApplication {
 				if (repository.startsWith("http")) {
 					URL url = new URL(repository);
 					Proxy proxy = getProxy(repository);
-					//System.out.println(" - Checking with proxy ["+proxy+"].");
-				//	long time = System.currentTimeMillis();
+					// System.out.println(" - Checking with proxy
+					// ["+proxy+"].");
+					// long time = System.currentTimeMillis();
 					URLConnection connection = proxy != null ? url.openConnection(proxy) : url.openConnection();
 					lastModified = connection.getLastModified();
-					//System.out.println("- Replied in "+(System.currentTimeMillis() - time)+" ms.");
+					// System.out.println("- Replied in
+					// "+(System.currentTimeMillis() - time)+" ms.");
 				} else {
 					File repositoryFile = new File(repository);
 					if (file.exists()) {
@@ -160,8 +164,15 @@ public class CheckedHeadless implements IApplication {
 					if (properties.containsKey(repository)) {
 						long lastStoredInfo = Long.parseLong("" + properties.get(repository));
 						System.out.println(
-								"- The repository seems to have been rebuilt " + TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified)
-										+ (lastModified - lastStoredInfo != 0 ? " than " : " as ") + "the last referenced aggregation.");
+								MessageFormat.format("{0} The repository seems to have been rebuilt {1} {2} the last referenced aggregation.",
+										lastModified > lastStoredInfo ? ">" : "-", TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified),
+										(lastModified - lastStoredInfo != 0 ? " than " : " as ")));
+						// System.out.println(
+						// "- The repository seems to have been rebuilt " +
+						// TimeMagnifier.magnifyTimeDifference(lastStoredInfo,
+						// lastModified)
+						// + (lastModified - lastStoredInfo != 0 ? " than " : "
+						// as ") + "the last referenced aggregation.");
 						if (lastModified > lastStoredInfo) {
 							hasRepositoryToRefresh = true;
 							properties.put(repository, "" + lastModified);
@@ -217,31 +228,13 @@ public class CheckedHeadless implements IApplication {
 	 * @return
 	 */
 	private static Proxy getProxy(String url) {
-		
-		List<Proxy> selector;
 		try {
-			selector = ProxySelector.getDefault().select(new java.net.URI(url));
+			List<Proxy> selector = ProxySelector.getDefault().select(new java.net.URI(url));
 			return selector != null && selector.size() > 0 ? selector.get(0) : null;
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		return null;
-		
-//		List<Proxy> selector = ProxySelector.getDefault().select(null);
-//		
-//		String httpProxyHost = System.getProperty("http.proxyHost");
-//		String httpProxyPort = System.getProperty("http.proxyPort");
-//		String httpsProxyHost = System.getProperty("https.proxyHost");
-//		String httpsProxyPort = System.getProperty("https.proxyPort");
-//
-//		if (httpProxyHost != null && httpProxyPort != null) {
-//			return new Proxy(Type.HTTP, new InetSocketAddress(httpProxyHost, Integer.parseInt(httpProxyPort)));
-//		}
-//		if (httpsProxyHost != null && httpsProxyPort != null) {
-//			return new Proxy(Type.HTTP, new InetSocketAddress(httpsProxyHost, Integer.parseInt(httpsProxyPort)));
-//		}
-//
-//		return null;
 	}
 
 }
