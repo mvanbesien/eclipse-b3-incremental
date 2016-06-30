@@ -1,15 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>fr.mvanbesien.b3.cli.headless</groupId>
-  <artifactId>fr.mvanbesien.b3.cli.headless.parent</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <modules>
-  	<module>fr.mvanbesien.b3.cli.headless</module>
-  	<module>fr.mvanbesien.b3.cli.headless.feature</module>
-  	<module>fr.mvanbesien.b3.cli.headless.site</module>
-  </modules>
-  <properties>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>fr.mvanbesien.b3.cli.headless</groupId>
+	<artifactId>fr.mvanbesien.b3.cli.headless.parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>fr.mvanbesien.b3.cli.headless</module>
+		<module>fr.mvanbesien.b3.cli.headless.feature</module>
+		<module>fr.mvanbesien.b3.cli.headless.site</module>
+	</modules>
+	<properties>
 		<tycho-version>0.24.0</tycho-version>
 		<tycho-groupid>org.eclipse.tycho</tycho-groupid>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,7 +18,6 @@
 		<release-type>SNAPSHOT</release-type>
 		<format>'N'yyyyMMddHHmm'-${release-type}'</format>
 	</properties>
-
 	<repositories>
 		<repository>
 			<id>luna</id>
@@ -30,7 +30,6 @@
 			<url>http://download.eclipse.org/modeling/emft/b3/updates-4.4</url>
 		</repository>
 	</repositories>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -84,21 +83,17 @@
 					</environments>
 				</configuration>
 			</plugin>
-			<!-- <plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<executions>
-					<execution>
-						<id>plugin-source</id>
-						<goals>
-							<goal>plugin-source</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin> -->
 		</plugins>
 	</build>
 	<inceptionYear>2016</inceptionYear>
-	<url>http://eclipse.worldline.com/documentation/asciidoctools</url>
+	<contributors>
+		<contributor>
+			<name>Maxence Vanbésien</name>
+			<email>mvaawl@gmail.com</email>
+			<roles>
+				<role>Creator</role>
+				<role>Developer</role>
+			</roles>
+		</contributor>
+	</contributors>
 </project>
