@@ -27,7 +27,7 @@ import java.util.Date;
  */
 public final class TimeMagnifier {
 
-	private static final String[] SIGNS = { "earlier", "later" };
+	private static final String[] SIGNS = { "earlier than", "later than" };
 
 	private static final long[] GAPS = { 1000, 60, 60, 24, 365 };
 

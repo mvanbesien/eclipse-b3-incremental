@@ -63,7 +63,7 @@ public class CheckedHeadless implements IApplication {
 	 * @throws Exception
 	 */
 	private Object defaultStart(IApplicationContext context) throws Exception {
-		System.out.println("Calling effective B3 aggregation now...");
+		System.out.println("Invoking B3 aggregation process...");
 		return new Headless().start(context);
 	}
 
@@ -146,13 +146,8 @@ public class CheckedHeadless implements IApplication {
 				if (repository.startsWith("http")) {
 					URL url = new URL(repository);
 					Proxy proxy = getProxy(repository);
-					// System.out.println(" - Checking with proxy
-					// ["+proxy+"].");
-					// long time = System.currentTimeMillis();
 					URLConnection connection = proxy != null ? url.openConnection(proxy) : url.openConnection();
 					lastModified = connection.getLastModified();
-					// System.out.println("- Replied in
-					// "+(System.currentTimeMillis() - time)+" ms.");
 				} else {
 					File repositoryFile = new File(repository);
 					if (file.exists()) {
@@ -163,16 +158,8 @@ public class CheckedHeadless implements IApplication {
 				if (lastModified >= 0) {
 					if (properties.containsKey(repository)) {
 						long lastStoredInfo = Long.parseLong("" + properties.get(repository));
-						System.out.println(
-								MessageFormat.format("{0} The repository seems to have been rebuilt {1} {2} the last referenced aggregation.",
-										lastModified > lastStoredInfo ? ">" : "-", TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified),
-										(lastModified - lastStoredInfo != 0 ? " than " : " as ")));
-						// System.out.println(
-						// "- The repository seems to have been rebuilt " +
-						// TimeMagnifier.magnifyTimeDifference(lastStoredInfo,
-						// lastModified)
-						// + (lastModified - lastStoredInfo != 0 ? " than " : "
-						// as ") + "the last referenced aggregation.");
+						System.out.println(MessageFormat.format("{0} The repository seems to have been rebuilt {1} the last referenced aggregation.",
+								lastModified > lastStoredInfo ? ">" : "-", TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified)));
 						if (lastModified > lastStoredInfo) {
 							hasRepositoryToRefresh = true;
 							properties.put(repository, "" + lastModified);
@@ -192,7 +179,7 @@ public class CheckedHeadless implements IApplication {
 			if (hasRepositoryToRefresh) {
 				System.out.println(Messages.AGGREGATION_WILL_HAPPEN.value());
 				properties.store(new FileWriter(infoFile), null);
-				System.out.println("(File with history saved at " + infoFile.getPath() + ")");
+				System.out.println("Updated file with history at " + infoFile.getPath());
 				return defaultStart(context);
 			}
 
