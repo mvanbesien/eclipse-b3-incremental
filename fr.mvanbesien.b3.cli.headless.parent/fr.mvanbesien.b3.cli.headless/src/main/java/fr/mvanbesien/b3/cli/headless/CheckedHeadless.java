@@ -142,6 +142,7 @@ public class CheckedHeadless implements IApplication {
 			boolean isProcessingInError = false;
 			for (String repository : repositories) {
 				System.out.println(Messages.CHECKING_LAST_UPDATE.value(repository));
+				long beginTime = System.nanoTime();
 				long lastModified = -1;
 				if (repository.startsWith("http")) {
 					URL url = new URL(repository);
@@ -154,7 +155,7 @@ public class CheckedHeadless implements IApplication {
 						lastModified = repositoryFile.lastModified();
 					}
 				}
-
+				System.out.println("- Check took "+((System.currentTimeMillis() - beginTime) / 1000000)+" ms.");
 				if (lastModified >= 0) {
 					if (properties.containsKey(repository)) {
 						long lastStoredInfo = Long.parseLong("" + properties.get(repository));
