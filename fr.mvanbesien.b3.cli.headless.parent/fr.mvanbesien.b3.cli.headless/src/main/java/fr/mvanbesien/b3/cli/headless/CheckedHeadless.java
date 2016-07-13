@@ -155,7 +155,7 @@ public class CheckedHeadless implements IApplication {
 						lastModified = repositoryFile.lastModified();
 					}
 				}
-				System.out.println("- Check took "+((System.currentTimeMillis() - beginTime) / 1000000)+" ms.");
+				System.out.println("- The check took "+((System.nanoTime() - beginTime) / 1000000)+" ms.");
 				if (lastModified >= 0) {
 					if (properties.containsKey(repository)) {
 						long lastStoredInfo = Long.parseLong("" + properties.get(repository));
