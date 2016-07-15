@@ -24,7 +24,6 @@ import java.net.ProxySelector;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -44,6 +43,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import fr.mvanbesien.b3.cli.headless.Messages;
 
 /**
  * 
@@ -63,7 +63,7 @@ public class CheckedHeadless implements IApplication {
 	 * @throws Exception
 	 */
 	private Object defaultStart(IApplicationContext context) throws Exception {
-		System.out.println("Invoking B3 aggregation process...");
+		System.out.println(Messages.TITLE.value());
 		return new Headless().start(context);
 	}
 
@@ -155,12 +155,12 @@ public class CheckedHeadless implements IApplication {
 						lastModified = repositoryFile.lastModified();
 					}
 				}
-				System.out.println("- The check took "+((System.nanoTime() - beginTime) / 1000000)+" ms.");
+				System.out.println(Messages.TIME_TO_CHECK.value(System.nanoTime(), beginTime, 1000000));
 				if (lastModified >= 0) {
 					if (properties.containsKey(repository)) {
 						long lastStoredInfo = Long.parseLong("" + properties.get(repository));
-						System.out.println(MessageFormat.format("{0} The repository seems to have been rebuilt {1} the last referenced aggregation.",
-								lastModified > lastStoredInfo ? ">" : "-", TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified)));
+						System.out.println(Messages.CHECK_RESULT.value(lastModified > lastStoredInfo ? ">" : "-",
+								TimeMagnifier.magnifyTimeDifference(lastStoredInfo, lastModified)));
 						if (lastModified > lastStoredInfo) {
 							hasRepositoryToRefresh = true;
 							properties.put(repository, "" + lastModified);
