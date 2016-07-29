@@ -43,7 +43,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
-import fr.mvanbesien.b3.cli.headless.Messages;
 
 /**
  * 
@@ -78,6 +77,7 @@ public class CheckedHeadless implements IApplication {
 
 		try {
 			// Retrieve the arguments.
+			System.out.println(Messages.PARSING_MODEL.value());
 			String[] args = (String[]) context.getArguments().get("application.args");
 			if (args == null || args.length == 0) {
 				return defaultStart(context);
@@ -124,7 +124,12 @@ public class CheckedHeadless implements IApplication {
 			for (ValidationSet validationSet : aggregation.getValidationSets()) {
 				for (Contribution contribution : validationSet.getContributions()) {
 					for (MappedRepository repository : contribution.getRepositories()) {
-						repositories.add(repository.getLocation());
+						if (repository != null) {
+							System.out.println(Messages.LOCATED_REPO.value(repository.getLocation(), repository.isEnabled(), repository.isMirrorArtifacts()));
+							if (repository.isEnabled()) {
+								repositories.add(repository.getLocation());
+							}
+						}
 					}
 				}
 			}
@@ -193,7 +198,7 @@ public class CheckedHeadless implements IApplication {
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(Messages.ON_EXCEPTION.value());
+			System.err.println(Messages.ON_EXCEPTION.value());
 			return defaultStart(context);
 		}
 	}
